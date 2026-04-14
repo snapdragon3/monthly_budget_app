@@ -409,7 +409,7 @@ body::before{
 }
 
 @media(max-width:768px){
-  .sidebar{display:none;}
+  .sidebar{display:none !important;} /* Ensure sidebar is hidden on mobile */
   .main{padding:20px 16px;}
   .kpi-strip{grid-template-columns:1fr 1fr;}
   
@@ -994,6 +994,7 @@ function toggleMobileMenu(forceClose = null) {
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.mobile-sidebar-overlay');
   const menuBtn = document.querySelector('.mobile-menu-btn');
+  const body = document.body;
   
   const shouldOpen = forceClose === false ? false : !sidebar.classList.contains('mobile-open');
   
@@ -1001,10 +1002,12 @@ function toggleMobileMenu(forceClose = null) {
     sidebar.classList.add('mobile-open');
     overlay.classList.add('active');
     menuBtn.classList.add('active');
+    body.style.overflow = 'hidden'; // Prevent body scrolling
   } else {
     sidebar.classList.remove('mobile-open');
     overlay.classList.remove('active');
     menuBtn.classList.remove('active');
+    body.style.overflow = ''; // Restore body scrolling
   }
 }
 
