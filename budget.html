@@ -409,7 +409,7 @@ body::before{
 }
 
 @media(max-width:768px){
-  .sidebar{display:none !important;} /* Ensure sidebar is hidden on mobile */
+  .sidebar{display:flex;transform:translateX(-100%);} /* Hide off-screen, not with display:none */
   .main{padding:20px 16px;}
   .kpi-strip{grid-template-columns:1fr 1fr;}
   
