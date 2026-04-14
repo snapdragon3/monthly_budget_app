@@ -177,6 +177,20 @@ body::before{
   display:flex;align-items:flex-start;justify-content:space-between;
   margin-bottom:28px;flex-wrap:wrap;gap:16px;
 }
+.mobile-menu-btn{
+  display:none;align-items:center;justify-content:center;
+  border:1px solid var(--border);background:var(--bg3);color:var(--text);
+  border-radius:var(--radius-xs);padding:10px 12px;cursor:pointer;
+  font-size:16px;font-weight:700;min-width:44px;transition:background 0.2s, border-color 0.2s;
+}
+.mobile-menu-btn:hover{background:var(--bg4);}
+.mobile-close-btn{
+  display:none;position:absolute;top:18px;right:18px;
+  width:34px;height:34px;border:none;border-radius:12px;
+  background:rgba(255,255,255,0.08);color:var(--text2);
+  font-size:18px;cursor:pointer;align-items:center;justify-content:center;
+}
+.mobile-close-btn:hover{background:rgba(255,255,255,0.14);}
 .page-title{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-0.5px;line-height:1.1;}
 .page-title span{color:var(--accent2);}
 .page-sub{color:var(--text2);font-size:13px;margin-top:4px;font-weight:400;}
@@ -403,7 +417,32 @@ body::before{
 
 /* RESPONSIVE */
 @media(max-width:1100px){.content-grid{grid-template-columns:1fr;}.kpi-strip{grid-template-columns:repeat(2,1fr);}.reports-grid{grid-template-columns:1fr;}}
-@media(max-width:768px){.sidebar{display:none;}.main{padding:20px 16px;}.kpi-strip{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){
+  html, body, .shell{min-width:0;}
+  html, body{max-width:100vw;}
+  .mobile-menu-btn{display:inline-flex;}
+  .sidebar{
+    display:flex;
+    position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;
+    transform:translateX(-100%);transition:transform 0.25s ease;
+    box-shadow:4px 0 40px rgba(0,0,0,0.25);z-index:120;
+    background:var(--bg2);
+  }
+  .sidebar.mobile-open{transform:translateX(0);}
+  .sidebar{border-right:1px solid var(--border);}
+  .sidebar .logo{padding-top:44px;}
+  .sidebar .mobile-close-btn{display:flex;}
+  .shell.mobile-open::before{content:'';position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:110;}
+  .main{padding:20px 16px;}
+  .kpi-strip{grid-template-columns:1fr 1fr;}
+  .content-grid{grid-template-columns:1fr;}
+  .reports-grid{grid-template-columns:1fr;}
+  .filter-row{justify-content:flex-start;}
+  .filter-select{min-width:0;flex:1 1 100%;width:100%;}
+  .export-btn{width:100%;margin-left:0;}
+  .salary-input{width:100%;max-width:220px;}
+  .page-title{font-size:24px;}
+}
 
 /* Saved month badges in sidebar */
 .saved-months-list{display:flex;flex-direction:column;gap:4px;}
@@ -422,6 +461,7 @@ body::before{
 
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
+  <button class="mobile-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
   <div class="logo">
     <div class="logo-icon">💰</div>
     Fin<span>lo</span>
@@ -473,9 +513,12 @@ body::before{
   <!-- ── DASHBOARD PAGE ── -->
   <div class="page active" id="page-dashboard">
     <div class="page-header">
-      <div>
-        <div class="page-title">Budget <span>Overview</span></div>
-        <div class="page-sub" id="dash-period-sub">20 Apr – 19 May 2026 · Period 1</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+        <div>
+          <div class="page-title">Budget <span>Overview</span></div>
+          <div class="page-sub" id="dash-period-sub">20 Apr – 19 May 2026 · Period 1</div>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div id="remaining-pill" class="remaining-pill pos">
@@ -632,9 +675,12 @@ body::before{
   <!-- ── REPORTS PAGE ── -->
   <div class="page" id="page-reports">
     <div class="page-header">
-      <div>
-        <div class="page-title">Reports &amp; <span>History</span></div>
-        <div class="page-sub">Analyse spending trends across saved periods</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+        <div>
+          <div class="page-title">Reports &amp; <span>History</span></div>
+          <div class="page-sub">Analyse spending trends across saved periods</div>
+        </div>
       </div>
       <button class="export-btn no-print" onclick="exportPDF()">⬇ Export PDF Report</button>
     </div>
@@ -795,6 +841,13 @@ function toggleTheme() {
   localStorage.setItem('finlo_theme', isDark ? 'light' : 'dark');
   refreshChartTheme();
 }
+function toggleSidebar() {
+  const shell = document.querySelector('.shell');
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar || !shell) return;
+  const isOpen = sidebar.classList.toggle('mobile-open');
+  shell.classList.toggle('mobile-open', isOpen);
+}
 (function(){
   const saved = localStorage.getItem('finlo_theme');
   if (saved) document.documentElement.setAttribute('data-theme', saved);
@@ -808,6 +861,8 @@ function showPage(id, btn) {
   document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar?.classList.contains('mobile-open')) toggleSidebar();
   if (id === 'reports') renderReports();
 }
 
