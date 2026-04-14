@@ -402,8 +402,171 @@ body::before{
 }
 
 /* RESPONSIVE */
-@media(max-width:1100px){.content-grid{grid-template-columns:1fr;}.kpi-strip{grid-template-columns:repeat(2,1fr);}.reports-grid{grid-template-columns:1fr;}}
-@media(max-width:768px){.sidebar{display:none;}.main{padding:20px 16px;}.kpi-strip{grid-template-columns:1fr 1fr;}}
+@media(max-width:1100px){
+  .content-grid{grid-template-columns:1fr;}
+  .kpi-strip{grid-template-columns:repeat(2,1fr);}
+  .reports-grid{grid-template-columns:1fr;}
+}
+
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .main{padding:20px 16px;}
+  .kpi-strip{grid-template-columns:1fr 1fr;}
+  
+  /* Mobile header adjustments */
+  .page-header{flex-direction:column;align-items:flex-start;gap:12px;margin-bottom:20px;}
+  .page-title{font-size:24px;}
+  .page-sub{font-size:12px;}
+  
+  /* Mobile salary input */
+  .salary-row{flex-direction:column;align-items:flex-start;gap:8px;width:100%;padding:12px 16px;}
+  .salary-row label{font-size:10px;}
+  .salary-input{font-size:20px;width:100%;max-width:none;}
+  
+  /* Mobile KPI cards */
+  .kpi-strip{grid-template-columns:1fr;gap:12px;margin-bottom:20px;}
+  .kpi-card{padding:16px;}
+  .kpi-label{font-size:12px;}
+  .kpi-value{font-size:18px;}
+  .kpi-sub{font-size:11px;}
+  
+  /* Mobile panels */
+  .panel{margin-bottom:16px;}
+  .panel-head{flex-direction:column;gap:8px;align-items:flex-start;}
+  .panel-title{font-size:16px;}
+  
+  /* Mobile content grid */
+  .content-grid{gap:16px;}
+  
+  /* Mobile table */
+  .expense-table{font-size:12px;}
+  .expense-table th,.expense-table td{padding:8px 4px;}
+  .expense-table th{width:auto!important;}
+  
+  /* Mobile tabs */
+  .tab-bar{flex-wrap:wrap;gap:6px;}
+  .tab-btn{font-size:11px;padding:6px 10px;}
+  
+  /* Mobile forms */
+  .input-group{flex-direction:column;gap:8px;}
+  .input-group label{font-size:12px;}
+  input,select,textarea{font-size:16px;padding:12px;} /* Prevent zoom on iOS */
+  
+  /* Mobile buttons */
+  .btn{min-height:44px;padding:12px 16px;font-size:14px;}
+  
+  /* Mobile navigation */
+  .period-nav{gap:12px;}
+  .period-btn{font-size:20px;padding:8px;min-width:44px;min-height:44px;}
+  .period-text{font-size:14px;}
+  
+  /* Mobile charts */
+  .chart-container{height:250px;}
+  
+  /* Mobile modal adjustments */
+  .modal{max-width:95vw;max-height:90vh;}
+  .modal-content{padding:20px;}
+  
+  /* Better touch targets */
+  .nav-item{min-height:44px;}
+  .tab-btn{min-height:36px;}
+  .save-btn{min-height:44px;}
+}
+
+/* Mobile menu button */
+.mobile-menu-btn{
+  display:none;
+  position:fixed;
+  top:16px;left:16px;
+  z-index:1001;
+  width:44px;height:44px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  transition:all 0.2s;
+}
+.mobile-menu-btn:hover{background:var(--bg3);}
+.mobile-menu-btn span{
+  width:20px;height:2px;
+  background:var(--text);
+  transition:all 0.2s;
+  border-radius:1px;
+}
+.mobile-menu-btn.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px);}
+.mobile-menu-btn.active span:nth-child(2){opacity:0;}
+.mobile-menu-btn.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
+
+/* Mobile sidebar overlay */
+.mobile-sidebar-overlay{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  background:rgba(0,0,0,0.5);
+  z-index:999;
+  opacity:0;visibility:hidden;
+  transition:all 0.3s;
+}
+.mobile-sidebar-overlay.active{
+  opacity:1;visibility:visible;
+}
+
+/* Mobile sidebar */
+@media(max-width:768px){
+  .mobile-menu-btn{display:flex;}
+  .mobile-sidebar-overlay{display:block;}
+  .sidebar{
+    position:fixed;
+    top:0;left:0;
+    width:280px;
+    height:100vh;
+    z-index:1000;
+    transform:translateX(-100%);
+    transition:transform 0.3s ease;
+  }
+  .sidebar.mobile-open{transform:translateX(0);}
+}
+
+/* Extra small screens */
+@media(max-width:480px){
+  .main{padding:16px 12px;}
+  
+  .page-title{font-size:20px;}
+  .kpi-card{padding:12px;}
+  .kpi-value{font-size:16px;}
+  
+  .panel-title{font-size:14px;}
+  .panel-body{padding:16px;}
+  
+  /* Stack everything vertically on very small screens */
+  .content-grid{grid-template-columns:1fr;}
+  .kpi-strip{grid-template-columns:1fr;}
+  
+  /* Smaller buttons and inputs */
+  .btn{font-size:13px;padding:10px 14px;}
+  .salary-input{font-size:18px;}
+  
+  /* Compact tables */
+  .expense-table{font-size:11px;}
+  .expense-table th,.expense-table td{padding:6px 2px;}
+  
+  /* Mobile animations */
+  .mobile-menu-btn span{transition:0.3s ease;}
+  .sidebar{transition:0.3s ease;}
+  .mobile-sidebar-overlay{transition:0.3s ease;}
+  
+  /* Mobile focus states */
+  .btn:focus,.input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:2px;}
+  
+  /* Mobile loading states */
+  .btn:disabled{opacity:0.6;cursor:not-allowed;}
+}
 
 /* Saved month badges in sidebar */
 .saved-months-list{display:flex;flex-direction:column;gap:4px;}
@@ -419,6 +582,16 @@ body::before{
 </head>
 <body>
 <div class="shell">
+
+<!-- Mobile Menu Button -->
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- Mobile Sidebar Overlay -->
+<div class="mobile-sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
@@ -809,6 +982,30 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   if (id === 'reports') renderReports();
+  
+  // Close mobile menu when navigating
+  if (window.innerWidth <= 768) {
+    toggleMobileMenu(false);
+  }
+}
+
+/* Mobile menu toggle */
+function toggleMobileMenu(forceClose = null) {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.querySelector('.mobile-sidebar-overlay');
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  
+  const shouldOpen = forceClose === false ? false : !sidebar.classList.contains('mobile-open');
+  
+  if (shouldOpen) {
+    sidebar.classList.add('mobile-open');
+    overlay.classList.add('active');
+    menuBtn.classList.add('active');
+  } else {
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+    menuBtn.classList.remove('active');
+  }
 }
 
 /* ════════════════════════════════════════
